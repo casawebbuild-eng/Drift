@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+     ______                            __
+    / ____/___  ____ ___  ____  __  __/ /____  _____
+   / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+  / /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+  \____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                      /_/
+          Created with Perplexity Computer
+          https://www.perplexity.ai/computer
+  -->
+  <meta name="generator" content="Perplexity Computer">
+  <meta name="author" content="Perplexity Computer">
+  <meta property="og:see_also" content="https://www.perplexity.ai/computer">
+  <link rel="author" href="https://www.perplexity.ai/computer">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drift — Sleep Companion</title>
+
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Mobile menu -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-label="Drift logo">
+          <circle cx="18" cy="18" r="16" stroke="var(--color-primary)" stroke-width="2" fill="none"/>
+          <path d="M18 6 A12 12 0 0 1 18 30 A6 6 0 0 0 18 18 A6 6 0 0 1 18 6Z" fill="var(--color-primary)" opacity="0.8"/>
+          <circle cx="21" cy="13" r="2" fill="var(--color-primary)" opacity="0.5"/>
+        </svg>
+        <span>Drift</span>
+      </div>
+
+      <div class="sidebar-section-title">Overview</div>
+      <ul class="sidebar-nav" role="list">
+        <li><button class="active" data-page="dashboard" onclick="switchPage('dashboard', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </button></li>
+        <li><button data-page="trends" onclick="switchPage('trends', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Trends
+        </button></li>
+      </ul>
+
+      <div class="sidebar-section-title">Analysis</div>
+      <ul class="sidebar-nav" role="list">
+        <li><button data-page="stages" onclick="switchPage('stages', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+          Sleep Stages
+        </button></li>
+        <li><button data-page="correlations" onclick="switchPage('correlations', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+          Correlations
+        </button></li>
+        <li><button data-page="log" onclick="switchPage('log', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Sleep Log
+        </button></li>
+      </ul>
+
+      <div class="sidebar-bottom">
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <span>Light mode</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main" id="mainContent">
+
+      <!-- ===== DASHBOARD PAGE ===== -->
+      <section class="page-section active" id="page-dashboard">
+        <div class="main-header">
+          <h1>Sleep Dashboard</h1>
+          <span class="date-range">Feb 10 — Mar 9, 2026</span>
+        </div>
+
+        <div class="kpi-grid" id="kpiGrid"></div>
+
+        <div class="charts-grid two-col">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Sleep Score</div>
+                <div class="chart-subtitle">28-day trend with 7-day moving average</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:260px"><canvas id="scoreChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Sleep Duration</div>
+                <div class="chart-subtitle">Hours asleep per night</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:260px"><canvas id="durationChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="recommendations" id="recommendations"></div>
+      </section>
+
+      <!-- ===== TRENDS PAGE ===== -->
+      <section class="page-section" id="page-trends">
+        <h2 class="section-title">Trends</h2>
+        <p class="section-subtitle">How your sleep metrics have evolved over the past month.</p>
+
+        <div class="charts-grid full">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Bedtime Consistency</div>
+                <div class="chart-subtitle">Earlier, more consistent bedtimes lead to better sleep</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:280px"><canvas id="bedtimeChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="charts-grid two-col">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">HRV During Sleep</div>
+                <div class="chart-subtitle">Higher HRV indicates better recovery</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:240px"><canvas id="hrvChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Resting Heart Rate</div>
+                <div class="chart-subtitle">Lower sleeping HR is a sign of good recovery</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:240px"><canvas id="hrChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="charts-grid full">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Sleep Efficiency</div>
+                <div class="chart-subtitle">Percentage of time in bed spent actually asleep</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:240px"><canvas id="efficiencyChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== STAGES PAGE ===== -->
+      <section class="page-section" id="page-stages">
+        <h2 class="section-title">Sleep Stages</h2>
+        <p class="section-subtitle">Breakdown of deep, REM, light sleep and awake time each night.</p>
+
+        <div class="charts-grid full">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Nightly Sleep Architecture</div>
+                <div class="chart-subtitle">Distribution of sleep stages across each night</div>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-deep)"></span>Deep</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-rem)"></span>REM</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-light-sleep)"></span>Light</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--color-awake)"></span>Awake</span>
+              </div>
+            </div>
+            <div class="chart-container" style="height:320px"><canvas id="stagesChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="charts-grid two-col">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Average Stage Distribution</div>
+                <div class="chart-subtitle">28-day average breakdown</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:280px"><canvas id="stagesPieChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Deep Sleep Trend</div>
+                <div class="chart-subtitle">Target: 1.5-2.0 hrs per night</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:280px"><canvas id="deepTrendChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CORRELATIONS PAGE ===== -->
+      <section class="page-section" id="page-correlations">
+        <h2 class="section-title">Correlations</h2>
+        <p class="section-subtitle">How your daytime habits affect your sleep quality.</p>
+
+        <div class="insights-grid" id="insightsGrid"></div>
+
+        <div class="charts-grid two-col">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Steps vs Sleep Score</div>
+                <div class="chart-subtitle">Does exercise help you sleep better?</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:280px"><canvas id="stepsScatterChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Bedtime vs Sleep Score</div>
+                <div class="chart-subtitle">Earlier bedtime, better score?</div>
+              </div>
+            </div>
+            <div class="chart-container" style="height:280px"><canvas id="bedtimeScatterChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== LOG PAGE ===== -->
+      <section class="page-section" id="page-log">
+        <h2 class="section-title">Sleep Log</h2>
+        <p class="section-subtitle">Night-by-night details from your wearable data.</p>
+
+        <div class="sleep-log">
+          <div class="log-table-wrapper">
+            <table class="log-table" id="sleepLogTable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Score</th>
+                  <th>Bedtime</th>
+                  <th>Wake</th>
+                  <th>Duration</th>
+                  <th>Deep</th>
+                  <th>REM</th>
+                  <th>Efficiency</th>
+                  <th>HRV</th>
+                  <th>HR</th>
+                  <th>Wakeups</th>
+                </tr>
+              </thead>
+              <tbody id="sleepLogBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">
+          Created with Perplexity Computer
+        </a>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
